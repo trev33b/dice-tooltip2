@@ -6,7 +6,7 @@ Hooks.on('ready', function() {
 //
 function setTooltipPosition(ev) {
   mousePos = { x: ev.clientX, y: ev.clientY };
-  
+
   var tooltip = $(".diceinfo-tooltip");
   if (tooltip.length == 0) return;
 
@@ -24,14 +24,15 @@ Hooks.on("renderedTidy5eSheet", (html) => {
   prepareDiceTooltipEvents(html);
 });
 
-Hooks.on("renderTidy5eNPC", (html) => {
-  prepareDiceTooltipEvents(html);
-});
+// Hooks.on("renderTidy5eNPC", (html) => {
+//   prepareDiceTooltipEvents(html);
+// });
 
-//Standard 5e Sheet
+//Standard 5e Sheet & Tidy5eNPC
 Hooks.on("renderActorSheet", (html) => {
   var el = $(html.element);
-  if (el.hasClass("tidy5e") || el.hasClass("alt5e")) return; //Prevent event doubling on supported sheet modules
+  // if (el.hasClass("tidy5e") || el.hasClass("alt5e")) return; //Prevent event doubling on supported sheet modules
+  if (el.hasClass("alt5e")) return; //Prevent event doubling on supported sheet modules
   prepareDiceTooltipEvents(html);
 });
 
@@ -164,10 +165,10 @@ function checkItemTooltip(el, actor) {
   var dataItem = $(el).closest("li").get();
   var data = dataItem[0].dataset;
   let item = actor.getOwnedItem(data.itemId);
-  
+
   let tooltipStr = "";
   let createTooltip = false;
-  
+
   if (item.hasAttack) {
     createTooltip = true;
     tooltipStr += "<p><b>• Attack: </b>" + formatDiceParts(rollFakeAttack(item)) + '</p>';
@@ -210,32 +211,33 @@ function formatBonus(bonus) {
 }
 
 function formatDiceParts(rollData) {
-  var res = "";
-  var bonusStr = "";
-
-  if (rollData.parts.length > 0) {
-    for (var i=0;i<rollData.parts.length;i++) {
-      if (typeof rollData.parts[i] == 'object') {
-        if (i > 0) res += " + ";
-        res += rollData.parts[i].formula;
-      } else {
-        bonusStr += rollData.parts[i];
-      }
-    }
-  } else {
-    bonusStr = rollData.formula;
-  }
-  
-  try {
-    var bonusVal = eval(bonusStr)
-    if (res.length > 0) res += " + ";
-    if (bonusVal != 0) res += bonusVal;
-  } catch (e) {
-    if (res.length > 0) res += " + ";
-    res += bonusStr;
-  }
-
-  return res;
+  return rollData.formula;
+  // var res = "";
+  // var bonusStr = "";
+  //
+  // if (rollData.terms.length > 0) {
+  //   for (var i=0;i<rollData.terms.length;i++) {
+  //     if (typeof rollData.terms[i] == 'object') {
+  //       if (i > 0) res += " + ";
+  //       res += rollData.terms[i].formula;
+  //     } else {
+  //       bonusStr += rollData.terms[i];
+  //     }
+  //   }
+  // } else {
+  //   bonusStr = rollData.formula;
+  // }
+  //
+  // try {
+  //   var bonusVal = eval(bonusStr)
+  //   if (res.length > 0) res += " + ";
+  //   if (bonusVal != 0) res += bonusVal;
+  // } catch (e) {
+  //   if (res.length > 0) res += " + ";
+  //   res += bonusStr;
+  // }
+  //
+  // return res;
 }
 
 /* -------------------------------------------- */
@@ -389,7 +391,7 @@ function d20RollFake({parts=[], data={}, rollMode=null, title=null,
 
     // Execute the roll and flag critical thresholds on the d20
     let roll = new Roll(parts.join(" + "), data).roll();
-    const d20 = roll.parts[0];
+    const d20 = roll.terms[0];
     d20.options.critical = critical;
     d20.options.fumble = fumble;
     if ( targetValue ) d20.options.target = targetValue;
@@ -424,7 +426,7 @@ function damageRollFake({parts, actor, data, rollMode=null, template, title, fla
     if ( crit === true ) {
       let add = (actor && actor.getFlag("dnd5e", "savageAttacks")) ? 1 : 0;
       let mult = 2;
-      roll.alter(add, mult);
+      roll = roll.alter(mult, add);
       flavor = `${flavor} (${game.i18n.localize("DND5E.Critical")})`;
     }
 
