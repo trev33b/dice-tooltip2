@@ -1,14 +1,14 @@
 {
-    "name": "dice-tooltip",
-    "title": "Dice Tooltip - D&D5e",
+    "name": "dice-tooltip2",
+    "title": "Dice Tooltip 2 - D&D5e",
     "description": "Shows a tooltip in actor sheets when hovering on Items/Spells/etc, with dice and bonus information. Especially useful for people that want to roll physical dice, but still maintain all of the convenience that Foundry provides.",
-    "author": "Steffan Poulsen - Majestic#6238",
-    "version": "1.0.9",
+    "author": "Trevor Bechtel",
+    "version": "2.0.0",
     "minimumCoreVersion": "0.8.0",
     "compatibleCoreVersion": "0.8.9",
     "styles": ["/css/dicetooltip.css"],
     "scripts": ["./dicetooltip.js"],
-    "url": "https://github.com/SteffanPoulsen/dice-tooltip",
-    "manifest": "https://github.com/SteffanPoulsen/dice-tooltip/raw/master/src/module.json",
-    "download": "https://github.com/SteffanPoulsen/dice-tooltip/raw/master/dist/dice-tooltip.zip"
+    "url": "https://github.com/SteffanPoulsen/dice-tooltip2",
+    "manifest": "https://github.com/trev33b/dice-tooltip2/raw/master/src/module.json",
+    "download": "https://github.com/trev33b/dice-tooltip2/raw/master/dist/dice-tooltip2.zip"
 }

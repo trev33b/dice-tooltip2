@@ -5,51 +5,46 @@ Hooks.on('ready', function() {
 
 //
 function setTooltipPosition(ev) {
-  mousePos = { x: ev.clientX, y: ev.clientY };
+  let mousePos = { x: ev.clientX, y: ev.clientY };
 
-  var tooltip = $(".diceinfo-tooltip");
-  if (tooltip.length == 0) return;
+  // noinspection JSUnresolvedFunction
+  let tooltip = $(".diceinfo-tooltip");
+  if (tooltip.length === 0) return;
 
-  tooltip.css('top', (ev.clientY - 24 - tooltip.height()/2) + 'px');
-  tooltip.css('left', (ev.clientX + 1) + 'px');
+  tooltip.css('top', (mousePos.y - 4 - tooltip.height()/2) + 'px');
+  tooltip.css('left', (mousePos.x + 1) + 'px');
 }
 
 //Support for Sky's Alt 5e Sheet
 Hooks.on("renderedAlt5eSheet", (html) => {
+  //todo: Test to see if this hook is still needed
   prepareDiceTooltipEvents(html);
 });
-
-//Support for Tidy5e Sheet
-Hooks.on("renderedTidy5eSheet", (html) => {
-  prepareDiceTooltipEvents(html);
-});
-
-// Hooks.on("renderTidy5eNPC", (html) => {
-//   prepareDiceTooltipEvents(html);
-// });
 
 //Standard 5e Sheet & Tidy5eNPC
 Hooks.on("renderActorSheet", (html) => {
-  var el = $(html.element);
+  // noinspection JSUnresolvedFunction
+  let el = $(html.element);
   // if (el.hasClass("tidy5e") || el.hasClass("alt5e")) return; //Prevent event doubling on supported sheet modules
   if (el.hasClass("alt5e")) return; //Prevent event doubling on supported sheet modules
   prepareDiceTooltipEvents(html);
 });
 
 function prepareDiceTooltipEvents(html) {
-  var splits = html.id.split("-");
-  var actor = null;
-  for (var i=0;i<splits.length;i++) {
+  let splits = html.id.split("-");
+  let actor = null;
+  for (let i=0;i<splits.length;i++) {
       actor = game.actors.get(splits[i]);
       if (actor != null) {
         break;
       }
   }
 
-  var sheetID = "#" + html.id;
+  let sheetID = "#" + html.id;
 
   if (actor == null) return;
 
+  // noinspection JSUnresolvedFunction
   $(".item .rollable", sheetID).on({
     mouseenter: function () {
       checkItemTooltip(this, actor);
@@ -59,6 +54,7 @@ function prepareDiceTooltipEvents(html) {
     }
   });
 
+  // noinspection JSUnresolvedFunction
   $(".ability-name.rollable", sheetID).on({
     mouseenter: function () {
       checkAbilityTooltip(this, actor);
@@ -68,6 +64,7 @@ function prepareDiceTooltipEvents(html) {
     }
   });
 
+  // noinspection JSUnresolvedFunction
   $(".skill-name.rollable", sheetID).on({
     mouseenter: function () {
       checkSkillTooltip(this, actor);
@@ -77,6 +74,7 @@ function prepareDiceTooltipEvents(html) {
     }
   });
 
+  // noinspection JSUnresolvedFunction
   $(".death-saves.rollable", sheetID).on({
     mouseenter: function () {
       checkDeathSaveTooltip();
@@ -87,6 +85,7 @@ function prepareDiceTooltipEvents(html) {
   });
 
 
+  // noinspection JSUnresolvedFunction
   $(".short-rest", sheetID).on({
     mouseenter: function () {
       checkShortRestTooltip(actor);
@@ -98,47 +97,53 @@ function prepareDiceTooltipEvents(html) {
 }
 
 function checkShortRestTooltip(actor) {
-  var hitDice = [];
-  for (var i=0;i<actor.data.items.length;i++) {
-    if (actor.data.items[i].type == "class") {
-      var hitDie = {die: actor.data.items[i].data.hitDice, amount: actor.data.items[i].data.levels};
-      var sameDieTypeFound = false;
-      for (var j=0;j<hitDice.length;j++) {
-        if (hitDice[j].die == hitDie.die) {
-          hitDice[j].amount += hitDie.amount;
-          sameDieTypeFound = true;
-          break;
-        }
-      }
+  let hitDice = [];
 
-      if (!sameDieTypeFound) hitDice.push(hitDie);
+  for (const classesKey in actor.data.data.classes) {
+    const clazz = actor.data.data.classes[classesKey];
+    let hitDieCount = hitDice[clazz.hitDice];
+    if (!hitDieCount) {
+      hitDieCount = 0;
     }
+    hitDieCount += clazz.levels - clazz.hitDiceUsed;
+    hitDice[clazz.hitDice] = hitDieCount;
   }
 
-  var dieStr = "";
-  for (var i=0;i<hitDice.length;i++) {
-    if (i > 0) dieStr += " + ";
-    dieStr += hitDice[i].amount + hitDice[i].die;
+  let dieStr = "";
+  for (const hitDiceKey in hitDice) {
+    if (!hitDice.hasOwnProperty(hitDiceKey)) {
+      continue;
+    }
+
+    const amount = hitDice[hitDiceKey];
+
+    if (dieStr) {
+      dieStr += " + ";
+    }
+    dieStr += amount + hitDiceKey;
   }
 
-  var tooltipStr = "<p><b>• Hit Dice:</b> " + dieStr + "</p>";
+  let tooltipStr = "<p><b>• Hit Dice:</b> " + dieStr + "</p>";
   showTooltip(tooltipStr);
 }
 
 function checkDeathSaveTooltip() {
-  var tooltipStr = "<p><b>• Saving Throw:</b> 1d20</p>";
+  let tooltipStr = "<p><b>• Saving Throw:</b> 1d20</p>";
   showTooltip(tooltipStr);
 }
 
 function checkSkillTooltip(el, actor) {
-  var dataItem = $(el).closest("li").get();
-  var data = dataItem[0].dataset;
-  var skill = data.skill;
+  // noinspection JSUnresolvedFunction
+  let dataItem = $(el).closest("li").get();
+  let data = dataItem[0].dataset;
+  let skill = data.skill;
 
-  if (skill == undefined) return;
+  if (!skill) {
+    return;
+  }
 
-  var skillData = actor.data.data.skills[skill];
-  var tooltipStr = "";
+  let skillData = actor.data.data.skills[skill];
+  let tooltipStr = "";
 
   tooltipStr += "<p><b>• Skill Check:</b> 1d20" + formatBonus(skillData.total) + "</p>";
 
@@ -146,11 +151,12 @@ function checkSkillTooltip(el, actor) {
 }
 
 function checkAbilityTooltip(el, actor) {
-  var dataItem = $(el).closest("li").get();
-  var data = dataItem[0].dataset;
-  var ability = data.ability;
-  var abilityData = actor.data.data.abilities[ability];
-  var tooltipStr = "";
+  // noinspection JSUnresolvedFunction
+  let dataItem = $(el).closest("li").get();
+  let data = dataItem[0].dataset;
+  let ability = data.ability;
+  let abilityData = actor.data.data.abilities[ability];
+  let tooltipStr = "";
 
   //Check
   tooltipStr += "<p><b>• Ability Check:</b> 1d20" + formatBonus(abilityData.mod) + "</p>";
@@ -162,9 +168,10 @@ function checkAbilityTooltip(el, actor) {
 }
 
 function checkItemTooltip(el, actor) {
-  var dataItem = $(el).closest("li").get();
-  var data = dataItem[0].dataset;
-  let item = actor.getOwnedItem(data.itemId);
+  // noinspection JSUnresolvedFunction
+  let dataItem = $(el).closest("li").get();
+  let data = dataItem[0].dataset;
+  let item = actor.items.get(data.itemId);
 
   let tooltipStr = "";
   let createTooltip = false;
@@ -180,7 +187,7 @@ function checkItemTooltip(el, actor) {
       // spellLevel: 1, ** need to find a cool solution for this **
       versatile: item.isVersatile
     };
-    var dmgOrHealing = item.isHealing? "Healing" : "Damage";
+    let dmgOrHealing = item.isHealing? "Healing" : "Damage";
     tooltipStr += "<p><b>• " + dmgOrHealing + ": </b>" + formatDiceParts(rollFakeDamage(item, itemConfig)) + " " + item.labels.damageTypes + "</p>";
   }
 
@@ -195,28 +202,30 @@ function checkItemTooltip(el, actor) {
 
 
 function showTooltip(text) {
-  var template = '<div class="diceinfo-tooltip"><span><div class="arrow-left"></div><div class="tooltiptext">' + text + '</div></span></div>';
+  let template = '<div class="diceinfo-tooltip"><span><div class="arrow-left"></div><div class="tooltiptext">' + text + '</div></span></div>';
+  // noinspection JSUnresolvedFunction
   $("body").append(template);
 }
 
 //
 function removeTooltip() {
+  // noinspection JSUnresolvedFunction
   $(".diceinfo-tooltip").remove();
 }
 
 function formatBonus(bonus) {
-  var evalNum = eval(bonus);
-  var numberPlusMinus = evalNum >= 0? " + " : " - ";
+  let evalNum = eval(bonus);
+  let numberPlusMinus = evalNum >= 0? " + " : " - ";
   return numberPlusMinus + Math.abs(evalNum);
 }
 
 function formatDiceParts(rollData) {
   return rollData.formula;
-  // var res = "";
-  // var bonusStr = "";
+  // let res = "";
+  // let bonusStr = "";
   //
   // if (rollData.terms.length > 0) {
-  //   for (var i=0;i<rollData.terms.length;i++) {
+  //   for (let i=0;i<rollData.terms.length;i++) {
   //     if (typeof rollData.terms[i] == 'object') {
   //       if (i > 0) res += " + ";
   //       res += rollData.terms[i].formula;
@@ -229,7 +238,7 @@ function formatDiceParts(rollData) {
   // }
   //
   // try {
-  //   var bonusVal = eval(bonusStr)
+  //   let bonusVal = eval(bonusStr)
   //   if (res.length > 0) res += " + ";
   //   if (bonusVal != 0) res += bonusVal;
   // } catch (e) {
@@ -312,7 +321,7 @@ function rollFakeDamage(item, {spellLevel=null, versatile=false}={}) {
       const lvl = item.actor.data.type === "character" ? actorData.details.level : actorData.details.spellLevel;
       item._scaleCantripDamage(parts, lvl, itemData.scaling.formula );
     } else if ( spellLevel && (itemData.scaling.mode === "level") && itemData.scaling.formula ) {
-      item._scaleSpellDamage(parts, itemData.level, spellLevel, itemData.scaling.formula );
+      item._scaleSpellDamage(parts, itemData.level, spellLevel, itemData.scaling.formula, {});
     }
   }
 
@@ -337,15 +346,13 @@ function rollFakeDamage(item, {spellLevel=null, versatile=false}={}) {
 
 //Dice methods
 
-function d20RollFake({parts=[], data={}, rollMode=null, title=null,
+function d20RollFake({parts=[], data={}, title=null,
                       flavor=null, advantage=null, disadvantage=null, critical=20, fumble=1, targetValue=null,
                       elvenAccuracy=false, halflingLucky=false, reliableTalent=false}={}) {
 
   // Handle input arguments
   flavor = flavor || title;
   parts = parts.concat(["@bonus"]);
-  rollMode = rollMode || game.settings.get("core", "rollMode");
-  let rolled = false;
 
   // Define inner roll function
   const _roll = function(parts, adv, form=null) {
@@ -409,13 +416,10 @@ function d20RollFake({parts=[], data={}, rollMode=null, title=null,
   else return _roll(parts, 0);
 }
 
-function damageRollFake({parts, actor, data, rollMode=null, template, title, flavor,
-                          allowCritical=true, critical=false}) {
+function damageRollFake({parts, actor, data, title, flavor, critical=false}) {
 
   // Handle input arguments
   flavor = flavor || title;
-  rollMode = game.settings.get("core", "rollMode");
-  let rolled = false;
 
   // Define inner roll function
   const _roll = function(parts, crit, form) {
