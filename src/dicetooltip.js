@@ -15,18 +15,8 @@ function setTooltipPosition(ev) {
   tooltip.css('left', (mousePos.x + 1) + 'px');
 }
 
-//Support for Sky's Alt 5e Sheet
-Hooks.on("renderedAlt5eSheet", (html) => {
-  //todo: Test to see if this hook is still needed
-  prepareDiceTooltipEvents(html);
-});
-
-//Standard 5e Sheet & Tidy5eNPC
+//Standard 5e Sheet, Tidy5eNPC, & Sky's Alt 5e Sheets
 Hooks.on("renderActorSheet", (html) => {
-  // noinspection JSUnresolvedFunction
-  let el = $(html.element);
-  // if (el.hasClass("tidy5e") || el.hasClass("alt5e")) return; //Prevent event doubling on supported sheet modules
-  if (el.hasClass("alt5e")) return; //Prevent event doubling on supported sheet modules
   prepareDiceTooltipEvents(html);
 });
 
@@ -221,6 +211,12 @@ function formatBonus(bonus) {
 
 function formatDiceParts(rollData) {
   return rollData.formula;
+
+  // Below is the original code for this method.  It's not clear to me (Trevor)
+  // how this is meant to differ from the rollData.formula and the formula seems
+  // to produce better results (no extra +'s in the output).  I'm guessing that
+  // formula may now be better due to improvements in the 0.8 Dice API.
+
   // let res = "";
   // let bonusStr = "";
   //
@@ -397,7 +393,7 @@ function d20RollFake({parts=[], data={}, title=null,
     }
 
     // Execute the roll and flag critical thresholds on the d20
-    let roll = new Roll(parts.join(" + "), data).roll();
+    let roll = new Roll(parts.join(" + "), data).roll({async:false});
     const d20 = roll.terms[0];
     d20.options.critical = critical;
     d20.options.fumble = fumble;
