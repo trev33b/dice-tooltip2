@@ -113,12 +113,12 @@ function checkShortRestTooltip(actor) {
     dieStr += amount + hitDiceKey;
   }
 
-  let tooltipStr = "<p><b>• Hit Dice:</b> " + dieStr + "</p>";
+  let tooltipStr = createToolTipText("DiceToolTip2.HitDice",dieStr);
   showTooltip(tooltipStr);
 }
 
 function checkDeathSaveTooltip() {
-  let tooltipStr = "<p><b>• Saving Throw:</b> 1d20</p>";
+  let tooltipStr = createToolTipText("DiceToolTip2.SavingThrow","1d20");
   showTooltip(tooltipStr);
 }
 
@@ -135,7 +135,7 @@ function checkSkillTooltip(el, actor) {
   let skillData = actor.data.data.skills[skill];
   let tooltipStr = "";
 
-  tooltipStr += "<p><b>• Skill Check:</b> 1d20" + formatBonus(skillData.total) + "</p>";
+  tooltipStr += createToolTipText("DiceToolTip2.SkillCheck","1d20" + formatBonus(skillData.total));
 
   showTooltip(tooltipStr);
 }
@@ -149,10 +149,10 @@ function checkAbilityTooltip(el, actor) {
   let tooltipStr = "";
 
   //Check
-  tooltipStr += "<p><b>• Ability Check:</b> 1d20" + formatBonus(abilityData.mod) + "</p>";
+  tooltipStr += createToolTipText("DiceToolTip2.AbilityCheck","1d20" + formatBonus(abilityData.mod));
 
   //Save
-  tooltipStr += "<p><b>• Saving Throw:</b> 1d20" + formatBonus(abilityData.mod + abilityData.prof) + "</p>";
+  tooltipStr += createToolTipText("DiceToolTip2.SavingThrow","1d20" + formatBonus(abilityData.mod + abilityData.prof));
 
   showTooltip(tooltipStr);
 }
@@ -164,32 +164,34 @@ function checkItemTooltip(el, actor) {
   let item = actor.items.get(data.itemId);
 
   let tooltipStr = "";
-  let createTooltip = false;
 
   if (item.hasAttack) {
-    createTooltip = true;
-    tooltipStr += "<p><b>• Attack: </b>" + formatDiceParts(rollFakeAttack(item)) + '</p>';
+    tooltipStr += createToolTipText("DiceToolTip2.Attack",formatDiceParts(rollFakeAttack(item)));
   }
 
   if (item.hasDamage) {
-    createTooltip = true;
     const itemConfig = {
       // spellLevel: 1, ** need to find a cool solution for this **
       versatile: item.isVersatile
     };
-    let dmgOrHealing = item.isHealing? "Healing" : "Damage";
-    tooltipStr += "<p><b>• " + dmgOrHealing + ": </b>" + formatDiceParts(rollFakeDamage(item, itemConfig)) + " " + item.labels.damageTypes + "</p>";
+    let dmgOrHealing = item.isHealing? "DiceToolTip2.Healing" : "DiceToolTip2.Damage";
+    tooltipStr += createToolTipText(dmgOrHealing,formatDiceParts(rollFakeDamage(item, itemConfig)) + " " + item.labels.damageTypes);
   }
 
   if (item.hasSave) {
-    createTooltip = true;
-    tooltipStr += "<p><b>• Save: </b>" + item.labels.save + "</p>";
+    tooltipStr += createToolTipText("DiceToolTip2.Save",item.labels.save);
   }
 
-  if (!createTooltip) return;
+  if (!tooltipStr) return;
   showTooltip(tooltipStr);
 }
 
+// Create normalized & localized tooltip text
+function createToolTipText(titleKey, body) {
+  let title = game.i18n.localize(titleKey);
+
+  return "<p><b>• " + title + ":</b> " + body  + "</p>";
+}
 
 function showTooltip(text) {
   let template = '<div class="diceinfo-tooltip"><span><div class="arrow-left"></div><div class="tooltiptext">' + text + '</div></span></div>';
@@ -254,7 +256,7 @@ function rollFakeAttack(item) {
   const actorData = item.actor.data.data;
   const flags = item.actor.data.flags.dnd5e || {};
   if ( !item.hasAttack ) {
-    throw new Error("You may not place an Attack Roll with this Item.");
+    throw new Error(game.i18n.localize("DiceToolTip2.ErrorItemWithoutAttack"));
   }
   const rollData = item.getRollData();
 
@@ -304,7 +306,7 @@ function rollFakeDamage(item, {spellLevel=null, versatile=false}={}) {
   const itemData = item.data.data;
   const actorData = item.actor.data.data;
   if ( !item.hasDamage ) {
-    throw new Error("You may not make a Damage Roll with this Item.");
+    throw new Error(game.i18n.localize("DiceToolTip2.ErrorItemWithoutDamage"));
   }
   const rollData = item.getRollData();
   if ( spellLevel ) rollData.item.level = spellLevel;
