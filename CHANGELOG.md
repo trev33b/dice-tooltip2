@@ -2,7 +2,6 @@
 
 * Removed "2" from all titling to keep original "dice-tooltip" package name.
 * Renamed module: dice-tooltip2 -> dice-tooltip as part of that
-* 
 
 # 2.0.0
 
