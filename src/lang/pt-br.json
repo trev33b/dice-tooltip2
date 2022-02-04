@@ -1,0 +1,12 @@
+{
+  "DiceToolTip.AbilityCheck": "Teste de Atributo",
+  "DiceToolTip.Attack": "Ataque",
+  "DiceToolTip.Damage": "Dano",
+  "DiceToolTip.ErrorItemWithoutAttack": "Você não pode ter uma Rolagem de Ataque com este item.",
+  "DiceToolTip.ErrorItemWithoutDamage": "Você não pode ter uma Rolagem de Dano com este item.",
+  "DiceToolTip.Healing": "Cura",
+  "DiceToolTip.HitDice": "Dados de Vida",
+  "DiceToolTip.Save": "Salvaguarda",
+  "DiceToolTip.SavingThrow": "Rolagem de Salvaguarda",
+  "DiceToolTip.SkillCheck": "Teste de Atributo"
+}
