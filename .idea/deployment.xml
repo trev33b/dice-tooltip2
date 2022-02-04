@@ -5,7 +5,7 @@
       <paths name="Local Foundry">
         <serverdata>
           <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$/src" web="http://localhost:31968/modules/dice-tooltip2" />
+            <mapping deploy="/" local="$PROJECT_DIR$/src" web="http://localhost:31968/modules/dice-tooltip" />
           </mappings>
         </serverdata>
       </paths>

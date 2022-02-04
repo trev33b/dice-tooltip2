@@ -36,7 +36,7 @@ other languages.
 1. Go to Foundry's Setup screen
 1. Go to the "Add-On Modules" tab
 1. Press "Install Module"
-1. Paste `Dice Tooltip2 - DnD5e` into the text field
+1. Paste `Dice Tooltip - DnD5e` into the text field
 1. Press "Install"
 
 ## Alternative

@@ -1,4 +1,11 @@
+# 2.0.1
+
+* Removed "2" from all titling to keep original "dice-tooltip" package name.
+* Renamed module: dice-tooltip2 -> dice-tooltip as part of that
+* 
+
 # 2.0.0
+
 * Forked from https://github.com/SteffanPoulsen/dice-tooltip to https://github.com/trev33b/dice-tooltip2
 * Renamed module: dice-tooltip -> dice-tooltip2
 * Fixed compatibility with Foundry 0.8 & Tidy5eSheets

@@ -1,12 +1,12 @@
 {
-  "DiceToolTip2.AbilityCheck": "Ability Check",
-  "DiceToolTip2.Attack": "Attack",
-  "DiceToolTip2.Damage": "Damage",
-  "DiceToolTip2.ErrorItemWithoutAttack": "You may not place an Attack Roll with this Item.",
-  "DiceToolTip2.ErrorItemWithoutDamage": "You may not make a Damage Roll with this Item.",
-  "DiceToolTip2.Healing": "Healing",
-  "DiceToolTip2.HitDice": "Hit Dice",
-  "DiceToolTip2.Save": "Save",
-  "DiceToolTip2.SavingThrow": "Saving Throw",
-  "DiceToolTip2.SkillCheck": "Skill Check"
+  "DiceToolTip.AbilityCheck": "Ability Check",
+  "DiceToolTip.Attack": "Attack",
+  "DiceToolTip.Damage": "Damage",
+  "DiceToolTip.ErrorItemWithoutAttack": "You may not place an Attack Roll with this Item.",
+  "DiceToolTip.ErrorItemWithoutDamage": "You may not make a Damage Roll with this Item.",
+  "DiceToolTip.Healing": "Healing",
+  "DiceToolTip.HitDice": "Hit Dice",
+  "DiceToolTip.Save": "Save",
+  "DiceToolTip.SavingThrow": "Saving Throw",
+  "DiceToolTip.SkillCheck": "Skill Check"
 }
