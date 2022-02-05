@@ -226,39 +226,9 @@ function formatBonus(bonus) {
 }
 
 function formatDiceParts(rollData) {
+  simplifiedTerms = simplifyTerms(rollData.terms);
+  rollData.terms = simplifiedTerms;
   return rollData.formula;
-
-  // Below is the original code for this method.  It's not clear to me (Trevor)
-  // how this is meant to differ from the rollData.formula and the formula seems
-  // to produce better results (no extra +'s in the output).  I'm guessing that
-  // formula may now be better due to improvements in the 0.8 Dice API.
-
-  // let res = "";
-  // let bonusStr = "";
-  //
-  // if (rollData.terms.length > 0) {
-  //   for (let i=0;i<rollData.terms.length;i++) {
-  //     if (typeof rollData.terms[i] == 'object') {
-  //       if (i > 0) res += " + ";
-  //       res += rollData.terms[i].formula;
-  //     } else {
-  //       bonusStr += rollData.terms[i];
-  //     }
-  //   }
-  // } else {
-  //   bonusStr = rollData.formula;
-  // }
-  //
-  // try {
-  //   let bonusVal = eval(bonusStr)
-  //   if (res.length > 0) res += " + ";
-  //   if (bonusVal != 0) res += bonusVal;
-  // } catch (e) {
-  //   if (res.length > 0) res += " + ";
-  //   res += bonusStr;
-  // }
-  //
-  // return res;
 }
 
 /* -------------------------------------------- */
@@ -426,6 +396,166 @@ function d20RollFake({parts=[], data={}, title=null,
   if ( advantage) return _roll(parts, 1);
   else if ( disadvantage ) return _roll(parts, -1);
   else return _roll(parts, 0);
+}
+
+/**
+ * Remove redundant adjacent +/- operator terms
+ *
+ * @returns {(function(*, *=): (*))|*}
+ */
+function removeRedundantOperators() {
+  return (newTerms, term) => {
+    const prior = newTerms[newTerms.length - 1];
+
+    if (prior instanceof OperatorTerm && term instanceof OperatorTerm) {
+      if (prior.operator === "+" && term.operator === "+") {
+        // Skip the redundant +
+        return newTerms;
+      }
+
+      if (prior.operator === "-" && term.operator === "-") {
+        // Convert prior's term to + and skip adding the newer term
+        newTerms[newTerms.length - 1] = new OperatorTerm({operator: "+", options: prior.options});
+        return newTerms;
+      }
+
+      if (prior.operator === "+" && term.operator === "-") {
+        // Convert prior's term to - and skip adding the newer term
+        newTerms[newTerms.length - 1] = new OperatorTerm({operator: "-", options: prior.options});
+        return newTerms;
+      }
+
+      if (prior.operator === "-" && term.operator === "+") {
+        // Skip the redundant +
+        return newTerms;
+      }
+    }
+
+    // Otherwise keep the term as is
+    newTerms.push(term);
+    return newTerms;
+  };
+}
+
+/**
+ * The following implements a poor-man's version of constant folding.
+ * It won't handle complex cases, such as using parenthesis or
+ * some of the more complicated order of precedence cases.
+ * What it does do is identify strings of terms that only
+ * include NumberTerms and OperatorTerms where the operator
+ * terms are + and - and attempts to merge those terms together
+ * to make the final result a little easier to read.
+ *
+ * To perform the folding, we look for the following pattern:
+ *    ... Op1 Num1 Op2 Num2 Op3 ...
+ *
+ * Where the Operators can only be + or -.   In such a case,
+ * we can combine Num1 Op2 Num2 into a single Num term.
+ *
+ * There are three addition special cases we can also handle:
+ *     Num1 Op2 Num2 Op3 ...  (i.e. pattern appears at the beginning)
+ *     ... Op1 Num1 Op2 Num2  (i.e. pattern appears at the end)
+ *     Num1 Op2 Num2          (i.e. pattern only has 3 terms)
+ *
+ * As before, we can safely combine Num1 Op2 Num2.
+ *
+ * To do this more completely we would require using tree of parse terms
+ * where the tree provides the precedence.  Foundry doesn't provide that
+ * out of the box with its Dice API nor does it make sense to implement
+ * such a scheme just for this simple module.  I do have a very rich
+ * dice parser that I've implemented, but it's not really ready for
+ * general usage. If I ever complete that and make it generally
+ * available, I may consider using it here.
+ *
+ * @returns {(function(*, *=, *, *): (*))|*}
+ */
+function foldConstantsReducer() {
+  return (newTerms, term) => {
+    // Always add the new term first, we'll cut out specific terms we want to fold later
+    newTerms.push(term);
+
+    // Do we have enough terms?  If not, continue to next term
+    if (newTerms.length < 5) {
+      return newTerms;
+    }
+
+    let firstIndex = newTerms.length - 5;
+    let testTerms = [];
+    for (let i=0; i < 5; i++) {
+      testTerms.push(newTerms[firstIndex + i]);
+    }
+
+    // Check for Op Num Op Num Op pattern
+    if (isPlusMinusOperator(testTerms[0]) &&
+        testTerms[1] instanceof NumericTerm &&
+        isPlusMinusOperator(testTerms[2]) &&
+        testTerms[3] instanceof NumericTerm &&
+        isPlusMinusOperator(testTerms[4])) {
+      // We have a valid pattern that we can reduce
+
+      let negative = testTerms[0].operator === "-";
+      let num1 = testTerms[1].number;
+      let op = testTerms[2].operator;
+      let num2 = testTerms[3].number;
+
+      if (negative) {
+        num1 *= -1;
+      }
+
+      let value;
+      switch (op) {
+        case '+': value = num1 + num2; break;
+        case '-': value = num1 - num2; break;
+      }
+
+      if (value === 0) {
+        // We can safely remove the entire set of terms resulted in 0
+        newTerms.splice(firstIndex, 4);
+      } else {
+        let newOp = new OperatorTerm({operator: value < 0 ? "-" : "+", options: testTerms[0].option});
+        value = value > 0 ? value : value * -1;
+        let newNum = new NumericTerm({number: value, options: testTerms[1].options});
+
+        // Now replace the num1, op, and num2 terms within newTerms
+        newTerms.splice(firstIndex, 4, newOp, newNum);
+      }
+    }
+
+    return newTerms;
+  };
+}
+
+function isPlusMinusOperator(term) {
+  return term instanceof OperatorTerm && (term.operator === "+" || term.operator === "-");
+}
+
+function foldConstants(simplified) {
+  // To assist with constant folding we temporarily add a + operator to the
+  // begining and end of teh simplified expression.  This makes it
+  // simpler to handle the corner cases when there's fewer than 5 terms
+  // and when a NumberTerm is at the beginning or the end.
+  let fakeOperation = new OperatorTerm({operator: "+"});
+  simplified.unshift(fakeOperation);
+  simplified.push(fakeOperation);
+
+  // Do the constant folding
+  simplified = simplified.reduce(foldConstantsReducer(), []);
+
+  // Remove the fake operations
+  if (simplified[0].operator === "+") {
+    // If the sign of the first fake operator did not change, then remove it
+    simplified.shift();
+  }
+  simplified.pop();
+
+  return simplified;
+}
+
+function simplifyTerms(terms) {
+  let simplified = terms.reduce(removeRedundantOperators(), []);
+  simplified = foldConstants(simplified);
+
+  return simplified;
 }
 
 function damageRollFake({parts, actor, data, title, flavor, critical=false}) {

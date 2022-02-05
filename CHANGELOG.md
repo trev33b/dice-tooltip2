@@ -1,3 +1,6 @@
+# 2.0.2
+* Simplified dice expression display through redundant operator removal and constant foldeing
+
 # 2.0.1
 
 * Removed "2" from all titling to keep original "dice-tooltip" package name.
