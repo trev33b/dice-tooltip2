@@ -4,17 +4,19 @@ an item/spell/ability/skills/etc. in an actor sheet.
 <b>Only works with the D&D5E system</b>
 
 This is useful for those who:
-* Want to roll physical dice, but still maintain all the convenience that Foundry provides.
 * Want a quick lookup of what will be rolled for a particular attack, check, save, etc.
+* Want to roll physical dice, but still maintain all the convenience that Foundry provides.
 
 Tooltips are provided for the following areas of the character sheet:
 
 |Hover Over|Displays|
 |---|---|
-|Ability|Ability Check<br/>Saving Throw|
+|Ability|Ability Check<br/>Saving Throw|![Ability Tooltip Example](https://raw.githubusercontent.com/trev33b/dice-tooltip2/master/assets/images/AbilityTooltip.png)|
 |Item|Attack Roll<br/>Damage Roll<br/>Healing Roll<br/>Save DC|
 |Short Rest|Remaining Hit Dice|
-|Skill|Skill Check|
+|Skill|Skill Check|![Skill Tooltip Example](https://raw.githubusercontent.com/trev33b/dice-tooltip2/master/assets/images/SkillCheckTooltip.png)|
+
+Favorites in the Tidy5e sheet also have tooltips.
 
 This has been tested with the following sheets:
 * Default 5e Character Sheet
@@ -26,8 +28,10 @@ This has been tested with the following sheets:
 Your mileage may vary with other sheets.
 
 
-Localization support is provided. Currently, only English is supported, but pull requests are welcome for 
-other languages.
+Localization support is provided.  Current supported languages:
+  - English
+  - Portuguese (Brazil)
+Pull requests are welcome for other languages.
 
 # Installation
 
