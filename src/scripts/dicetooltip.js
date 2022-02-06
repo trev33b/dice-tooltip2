@@ -15,86 +15,129 @@ function setTooltipPosition(ev) {
   tooltip.css('left', (mousePos.x + 1) + 'px');
 }
 
-//Standard 5e Sheet, Tidy5eNPC, & Sky's Alt 5e Sheets
+//Standard 5e Sheet, Tidy5e, & Sky's Alt 5e Sheets
 Hooks.on("renderActorSheet", (html) => {
   prepareDiceTooltipEvents(html);
 });
 
 function prepareDiceTooltipEvents(html) {
-  let splits = html.id.split("-");
-  let actor = null;
-  for (let i=0;i<splits.length;i++) {
-      actor = game.actors.get(splits[i]);
-      if (actor != null) {
-        break;
-      }
+  const sheetID = "#" + html.id;
+  const actor = getActor(html);
+
+  if (actor == null) {
+    return;
   }
 
-  let sheetID = "#" + html.id;
+  registerEventListeners(sheetID, actor);
+  registerFavoritesMutationObserver(sheetID, actor);
+}
 
-  if (actor == null) return;
+function getActor(html) {
+  const splits = html.id.split("-");
+  for (let i = 0; i < splits.length; i++) {
+    let actor = game.actors.get(splits[i]);
+    if (actor) {
+      return actor;
+    }
+  }
 
+  return null;
+}
+
+/**
+ *  The Favorites section of Tidy5e is created on the fly after
+ *  the sheet is rendered and recreated every time a favorite is
+ *  added/removed.  This function detects changes to the favorites DOM
+ *  and sets up event listeners as needed.
+ *
+ * @param sheetID
+ * @param actor
+ */
+function registerFavoritesMutationObserver(sheetID, actor) {
+  //noinspection JSUnresolvedFunction
+  const jFavorites = $(".favorites-target", sheetID);
+  if (jFavorites) {
+    const favorites = jFavorites.toArray();
+    const favoritesObserver = new MutationObserver(favoritesChanged(actor))
+
+    for (const favorite of favorites) {
+      favoritesObserver.observe(favorite, {attributes: false, childList: true, subtree: true});
+    }
+  }
+}
+
+function favoritesChanged(actor) {
+  return (mutationsList) => {
+    mutationsList.forEach((mutation) => {
+      mutation.addedNodes.forEach((addedNode) => {
+        registerEventListeners(addedNode, actor);
+      })
+    })
+  };
+}
+
+function registerEventListeners(rootElement, actor) {
   // noinspection JSUnresolvedFunction
-  $(".item .rollable", sheetID).on({
+  $(".item .rollable", rootElement).on({
     mouseenter: function () {
       checkItemTooltip(this, actor);
     },
-    mouseleave:function () {
+    mouseleave: function () {
       removeTooltip();
     }
   });
 
-  //todo: add tooltip for initiaive: .attribute-name.rollable
+  //todo: add tooltip for initiative: .attribute-name.rollable
   //todo: add tooltip for .ability-mod.rollable
   //todo: add tooltip for .ability-save.rollable
-  //todo: test this on tidy5e favorite items list
+
   // noinspection JSUnresolvedFunction
-  $(".item-name.rollable", sheetID).on({
+  $(".item-name.rollable", rootElement).on({
     mouseenter: function () {
       checkItemTooltip(this, actor);
     },
-    mouseleave:function () {
+    mouseleave: function () {
       removeTooltip();
     }
   });
 
   // noinspection JSUnresolvedFunction
-  $(".ability-name.rollable", sheetID).on({
+  $(".ability-name.rollable", rootElement).on({
     mouseenter: function () {
       checkAbilityTooltip(this, actor);
     },
-    mouseleave:function () {
+    mouseleave: function () {
       removeTooltip();
     }
   });
 
   // noinspection JSUnresolvedFunction
-  $(".skill-name.rollable", sheetID).on({
+  $(".skill-name.rollable", rootElement).on({
     mouseenter: function () {
       checkSkillTooltip(this, actor);
     },
-    mouseleave:function () {
+    mouseleave: function () {
       removeTooltip();
     }
   });
 
   // noinspection JSUnresolvedFunction
-  $(".death-saves.rollable", sheetID).on({
+  $(".death-saves.rollable", rootElement).on({
     mouseenter: function () {
       checkDeathSaveTooltip();
     },
-    mouseleave:function () {
+    mouseleave: function () {
       removeTooltip();
     }
   });
 
 
   // noinspection JSUnresolvedFunction
-  $(".short-rest", sheetID).on({
+  $(".short-rest", rootElement).on({
     mouseenter: function () {
       checkShortRestTooltip(actor);
     },
-    mouseleave:function () {
+    mouseleave: function () {
       removeTooltip();
     }
   });
@@ -226,8 +269,7 @@ function formatBonus(bonus) {
 }
 
 function formatDiceParts(rollData) {
-  simplifiedTerms = simplifyTerms(rollData.terms);
-  rollData.terms = simplifiedTerms;
+  rollData.terms = simplifyTerms(rollData.terms);
   return rollData.formula;
 }
 
@@ -531,7 +573,7 @@ function isPlusMinusOperator(term) {
 
 function foldConstants(simplified) {
   // To assist with constant folding we temporarily add a + operator to the
-  // begining and end of teh simplified expression.  This makes it
+  // beginning and end of teh simplified expression.  This makes it
   // simpler to handle the corner cases when there's fewer than 5 terms
   // and when a NumberTerm is at the beginning or the end.
   let fakeOperation = new OperatorTerm({operator: "+"});
@@ -571,8 +613,8 @@ function damageRollFake({parts, actor, data, title, flavor, critical=false}) {
     // Modify the damage formula for critical hits
     if ( crit === true ) {
       let add = (actor && actor.getFlag("dnd5e", "savageAttacks")) ? 1 : 0;
-      let mult = 2;
-      roll = roll.alter(mult, add);
+      let multiply = 2;
+      roll = roll.alter(multiply, add);
       flavor = `${flavor} (${game.i18n.localize("DND5E.Critical")})`;
     }
 

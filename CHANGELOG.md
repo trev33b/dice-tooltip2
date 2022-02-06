@@ -1,5 +1,7 @@
-# 2.0.2
-* Simplified dice expression display through redundant operator removal and constant foldeing
+# 2.1.0
+* Simplified dice expression display using redundant operator removal and constant folding
+* Implemented ability to show tooltips on Tidy5e favorites
+* (internal) fixed spelling errors within the source code
 
 # 2.0.1
 
