@@ -13,7 +13,7 @@ Tooltips are provided for the following areas of the character sheet:
 |---|---|---|
 |Ability|Ability Check<br/>Saving Throw|![Ability Tooltip Example](assets/images/AbilityTooltip.png)|
 |Item|Attack Roll<br/>Damage Roll<br/>Healing Roll<br/>Save DC|![](assets/images/MeleeAttackTooltip.png)<br>![](assets/images/SpellAttackTooltip.png)<br>![](assets/images/HealingTooltip.png)<br>![](assets/images/Spell Save Tooltip.png)|
-|Short Rest|Remaining Hit Dice|![](assets/images/ShortRestTooltip.png)|
+|Short Rest|Remaining Hit Dice|<img src="assets/images/ShortRestTooltip.png" width="150" height="150">|
 |Skill|Skill Check|![Skill Tooltip Example](assets/images/SkillCheckTooltip.png)|
 
 Favorites in the Tidy5e sheet also have tooltips.
