@@ -17,6 +17,7 @@ Tooltips are provided for the following areas of the character sheet:
 |Skill|Skill Check|![Skill Tooltip Example](assets/images/SkillCheckTooltip.png)|
 
 Favorites in the Tidy5e sheet also have tooltips.
+
 ![](assets/images/Tidy5eFavoritesTooltip.png)
 
 This has been tested with the following sheets:
