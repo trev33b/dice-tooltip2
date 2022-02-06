@@ -9,14 +9,15 @@ This is useful for those who:
 
 Tooltips are provided for the following areas of the character sheet:
 
-|Hover Over|Displays||
+|Hover Over|Displays|Sample Tooltips|
 |---|---|---|
-|Ability|Ability Check<br/>Saving Throw|![Ability Tooltip Example](https://raw.githubusercontent.com/trev33b/dice-tooltip2/master/assets/images/AbilityTooltip.png)|
-|Item|Attack Roll<br/>Damage Roll<br/>Healing Roll<br/>Save DC|![](assets/images/MeleeAttackTooltip.png)
-|Short Rest|Remaining Hit Dice|
-|Skill|Skill Check|![Skill Tooltip Example](https://raw.githubusercontent.com/trev33b/dice-tooltip2/master/assets/images/SkillCheckTooltip.png)|
+|Ability|Ability Check<br/>Saving Throw|![Ability Tooltip Example](assets/images/AbilityTooltip.png)|
+|Item|Attack Roll<br/>Damage Roll<br/>Healing Roll<br/>Save DC|![](assets/images/MeleeAttackTooltip.png)<br>![](assets/images/SpellAttackTooltip.png)<br>![](assets/images/HealingTooltip.png)<br>![](assets/images/Spell Save Tooltip.png)|
+|Short Rest|Remaining Hit Dice|![](assets/images/ShortRestTooltip.png)|
+|Skill|Skill Check|![Skill Tooltip Example](assets/images/SkillCheckTooltip.png)|
 
 Favorites in the Tidy5e sheet also have tooltips.
+![](assets/images/Tidy5eFavoritesTooltip.png)
 
 This has been tested with the following sheets:
 * Default 5e Character Sheet
@@ -31,6 +32,7 @@ Your mileage may vary with other sheets.
 Localization support is provided.  Current supported languages:
   - English
   - Portuguese (Brazil)
+
 Pull requests are welcome for other languages.
 
 # Installation

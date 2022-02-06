@@ -1,3 +1,8 @@
+# 2.1.1
+* Minor fixes
+* Updated README to convey recent improvements
+* Added pictures to the README
+
 # 2.1.0
 * Simplified dice expression display using redundant operator removal and constant folding
 * Implemented ability to show tooltips on Tidy5e favorites
