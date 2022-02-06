@@ -9,10 +9,10 @@ This is useful for those who:
 
 Tooltips are provided for the following areas of the character sheet:
 
-|Hover Over|Displays|
-|---|---|
+|Hover Over|Displays||
+|---|---|---|
 |Ability|Ability Check<br/>Saving Throw|![Ability Tooltip Example](https://raw.githubusercontent.com/trev33b/dice-tooltip2/master/assets/images/AbilityTooltip.png)|
-|Item|Attack Roll<br/>Damage Roll<br/>Healing Roll<br/>Save DC|
+|Item|Attack Roll<br/>Damage Roll<br/>Healing Roll<br/>Save DC|![](assets/images/MeleeAttackTooltip.png)
 |Short Rest|Remaining Hit Dice|
 |Skill|Skill Check|![Skill Tooltip Example](https://raw.githubusercontent.com/trev33b/dice-tooltip2/master/assets/images/SkillCheckTooltip.png)|
 
