@@ -1,3 +1,6 @@
+# 2.2.1
+* Minor fix to versioning 
+
 # 2.2.0
 * Now render both normal & versatile damage in one tooltip
 * Verified compatibility with FoundryVTT 9
