@@ -209,7 +209,7 @@ function checkAbilityTooltip(el, actor) {
   tooltipStr += createToolTipText("DiceToolTip.AbilityCheck","1d20" + formatBonus(abilityData.mod));
 
   //Save
-  tooltipStr += createToolTipText("DiceToolTip.SavingThrow","1d20" + formatBonus(abilityData.mod + abilityData.prof));
+  tooltipStr += createToolTipText("DiceToolTip.SavingThrow","1d20" + formatBonus(abilityData.save));
 
   showTooltip(tooltipStr);
 }

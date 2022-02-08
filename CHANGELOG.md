@@ -1,3 +1,7 @@
+# 2.1.2
+* Fixed ability save rendering.  It had been displaying "d20 - NaN"
+* Updated module.json to include Portuguese locale listing.  Not sure if using that locale was broken before, but this should help.
+
 # 2.1.1
 * Minor fixes
 * Updated README to convey recent improvements
