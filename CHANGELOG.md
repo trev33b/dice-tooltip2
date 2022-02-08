@@ -1,6 +1,12 @@
-# 2.1.2
+# 2.2.0
+* Now render both normal & versatile damage in one tooltip
+* Verified compatibility with FoundryVTT 9
+
+Bug Fixes:
 * Fixed ability save rendering.  It had been displaying "d20 - NaN"
-* Updated module.json to include Portuguese locale listing.  Not sure if using that locale was broken before, but this should help.
+* Updated module.json to include Portuguese locale listing.  Not sure if using that locale was broken before, but this should help
+* Fixed corner case for constant folding where you could end up with a "+ 0" in the expression. It's now properly removed
+* Remove damage types injected in the middle of formulas using "[type]" notation.  We add a label at the end of the roll, so it doesn't need to be in the middle.
 
 # 2.1.1
 * Minor fixes

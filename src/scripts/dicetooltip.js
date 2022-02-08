@@ -227,12 +227,13 @@ function checkItemTooltip(el, actor) {
   }
 
   if (item.hasDamage) {
-    const itemConfig = {
-      // spellLevel: 1, ** need to find a cool solution for this **
-      versatile: item.isVersatile
-    };
     let dmgOrHealing = item.isHealing? "DiceToolTip.Healing" : "DiceToolTip.Damage";
-    tooltipStr += createToolTipText(dmgOrHealing,formatDiceParts(rollFakeDamage(item, itemConfig)) + " " + item.labels.damageTypes);
+
+    tooltipStr += createToolTipText(dmgOrHealing,formatDiceParts(rollFakeDamage(item)) + " " + item.labels.damageTypes);
+    if (item.isVersatile) {
+      // Get versatile version of the damage
+      tooltipStr += createToolTipText("DiceToolTip.VersatileDamage",formatDiceParts(rollFakeDamage(item, true)) + " " + item.labels.damageTypes);
+    }
   }
 
   if (item.hasSave) {
@@ -328,7 +329,8 @@ function rollFakeAttack(item) {
 
   /* -------------------------------------------- */
 
-function rollFakeDamage(item, {spellLevel=null, versatile=false}={}) {
+function rollFakeDamage(item, versatile=false) {
+  const spellLevel = null; //todo: figure out how to incorporate spell level upgrades
   const itemData = item.data.data;
   const actorData = item.actor.data.data;
   if ( !item.hasDamage ) {
@@ -338,8 +340,11 @@ function rollFakeDamage(item, {spellLevel=null, versatile=false}={}) {
   if ( spellLevel ) rollData.item.level = spellLevel;
 
   // Define Roll parts
-  const parts = itemData.damage.parts.map(d => d[0]);
-  if ( versatile && itemData.damage.versatile ) parts[0] = itemData.damage.versatile;
+  const damageType = /\[.*]/g;
+  const parts = itemData.damage.parts.map(d => d[0].replaceAll(damageType,""));
+  if ( versatile && itemData.damage.versatile ) {
+    parts[0] = itemData.damage.versatile.replaceAll(damageType,"");
+  }
   if ( (item.data.type === "spell") ) {
     if ( (itemData.scaling.mode === "cantrip") ) {
       const lvl = item.actor.data.type === "character" ? actorData.details.level : actorData.details.spellLevel;
@@ -561,6 +566,16 @@ function foldConstantsReducer() {
         // Now replace the num1, op, and num2 terms within newTerms
         newTerms.splice(firstIndex, 4, newOp, newNum);
       }
+    } else if (isPlusMinusOperator(testTerms[0]) &&
+        testTerms[1] instanceof NumericTerm && testTerms[1].number === 0 &&
+        isPlusMinusOperator(testTerms[2])) {
+      // Remove the leading +/- 0 terms
+      newTerms.splice(firstIndex, 2);
+    } else if (isPlusMinusOperator(testTerms[2]) &&
+        testTerms[3] instanceof NumericTerm && testTerms[3].number === 0 &&
+        isPlusMinusOperator(testTerms[4])) {
+      // Remove the trailing +/- 0 terms
+      newTerms.splice(firstIndex+2, 2);
     }
 
     return newTerms;
