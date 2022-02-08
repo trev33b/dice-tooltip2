@@ -1,3 +1,6 @@
+# 2.2.2
+* Fixed stylesheet conflict with SmallTime module
+
 # 2.2.1
 * Minor fix to versioning 
 

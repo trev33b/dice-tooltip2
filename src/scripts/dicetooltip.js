@@ -8,7 +8,7 @@ function setTooltipPosition(ev) {
   let mousePos = { x: ev.clientX, y: ev.clientY };
 
   // noinspection JSUnresolvedFunction
-  let tooltip = $(".diceinfo-tooltip");
+  let tooltip = $(".dice-tooltip");
   if (tooltip.length === 0) return;
 
   tooltip.css('top', (mousePos.y - 4 - tooltip.height()/2) + 'px');
@@ -252,7 +252,7 @@ function createToolTipText(titleKey, body) {
 }
 
 function showTooltip(text) {
-  let template = '<div class="diceinfo-tooltip"><span><div class="arrow-left"></div><div class="tooltiptext">' + text + '</div></span></div>';
+  let template = '<div class="dice-tooltip"><span><div class="dice-tooltip-arrow-left"></div><div class="dice-tooltip-text">' + text + '</div></span></div>';
   // noinspection JSUnresolvedFunction
   $("body").append(template);
 }
@@ -260,7 +260,7 @@ function showTooltip(text) {
 //
 function removeTooltip() {
   // noinspection JSUnresolvedFunction
-  $(".diceinfo-tooltip").remove();
+  $(".dice-tooltip").remove();
 }
 
 function formatBonus(bonus) {

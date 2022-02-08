@@ -1,6 +1,6 @@
  /* Tooltip container */
 
- .diceinfo-tooltip {
+.dice-tooltip {
   position: fixed;
   overflow:hidden;
   z-index: 10000;
@@ -10,7 +10,7 @@
   vertical-align: middle;
 }
 
-.diceinfo-tooltip .tooltiptext {
+.dice-tooltip .dice-tooltip-text {
   background: #0000009f;
   color: #ffffff9f;
   padding: 4px;
@@ -26,7 +26,7 @@
   box-shadow: rgba(0,0,0,0.8) 0 0 2px;
 }
 
-.diceinfo-tooltip .arrow-left {
+.dice-tooltip .dice-tooltip-arrow-left {
   width: 0;
   height: 0;
   top:50%;
