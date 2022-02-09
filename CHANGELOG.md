@@ -2,7 +2,7 @@
 * Fixed stylesheet conflict with SmallTime module
 
 # 2.2.1
-* Minor fix to versioning 
+* Minor fix to versioning
 
 # 2.2.0
 * Now render both normal & versatile damage in one tooltip
@@ -37,7 +37,7 @@ Bug Fixes:
 * Improved the tooltip presentation (tightened padding, inverted coloring to match other tooltips, add transparency)
 * Fixed dice formula presentation to not show extra +'s
 * Changed Short Rest tooltip to show remaining hit dice that can be used
-* Removed unnecessary special handling for Tidy5e (Player & NPC) and Sky's Alt 5e sheets 
+* Removed unnecessary special handling for Tidy5e (Player & NPC) and Sky's Alt 5e sheets
 * Lots of code cleanup (warnings & patterns) and wrapped with WebStorm project
 * Added localization support and provided translations for English
 
@@ -52,7 +52,7 @@ Bug Fixes:
 
 # 1.0.6
 
-* Redid the hit-dice tooltip code, now works for multi-classing as well. 
+* Redid the hit-dice tooltip code, now works for multi-classing as well.
 
 # 1.0.5
 

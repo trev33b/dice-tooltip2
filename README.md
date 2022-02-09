@@ -1,5 +1,5 @@
-A [FoundryVTT](http://foundryvtt.com/) module that shows dice and bonus information when hovering over 
-an item/spell/ability/skills/etc. in an actor sheet. 
+A [FoundryVTT](http://foundryvtt.com/) module that shows dice and bonus information when hovering over
+an item/spell/ability/skills/etc. in an actor sheet.
 
 <b>Only works with the D&D5E system</b>
 
@@ -63,4 +63,3 @@ His work appeared to be broken with the release of Foundry 0.8 (new Dice API) an
 and it didn't look like it was going to get fixed anytime soon.  So I forked his
 work to this location, fixed those main issues, plus make several enhancements
 to the presentation of the tooltip and the code itself.
-
