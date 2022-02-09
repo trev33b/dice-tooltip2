@@ -31,5 +31,11 @@
             "name": "Português (Brasil)",
             "path": "lang/pt-br.json"
         }
+    ],
+    "media": [
+        {
+            "type": "cover",
+            "link": "assets/images/VersatileTooltip.png"
+        }
     ]
 }
