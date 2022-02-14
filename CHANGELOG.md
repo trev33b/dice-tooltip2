@@ -1,3 +1,8 @@
+# 2.3.0
+**This module now requires use of DND5e system 0.95 or later.**
+* Fixed handling of scaling cantrips which caused an error to display in the console and no tooltip to appear.  This was due to a change in the DND5e 0.95 system module.
+* Fixed stylesheet conflict with chat log's dice tooltip's.  Renamed all of mine to use "dtt2" prefix instead of "dice-tooltip"
+
 # 2.2.2
 * Fixed stylesheet conflict with SmallTime module
 

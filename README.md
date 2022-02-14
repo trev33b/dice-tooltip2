@@ -1,7 +1,7 @@
 A [FoundryVTT](http://foundryvtt.com/) module that shows dice and bonus information when hovering over
 an item/spell/ability/skills/etc. in an actor sheet.
 
-<b>Only works with the D&D5E system</b>
+<b>Only works with the D&D5E system 0.95 or later</b>
 
 This is useful for those who:
 * Want a quick lookup of what will be rolled for a particular attack, check, save, etc.

@@ -8,7 +8,7 @@ function setTooltipPosition(ev) {
   let mousePos = { x: ev.clientX, y: ev.clientY };
 
   // noinspection JSUnresolvedFunction
-  let tooltip = $(".dice-tooltip");
+  let tooltip = $(".dtt2");
   if (tooltip.length === 0) return;
 
   tooltip.css('top', (mousePos.y - 4 - tooltip.height()/2) + 'px');
@@ -252,7 +252,7 @@ function createToolTipText(titleKey, body) {
 }
 
 function showTooltip(text) {
-  let template = '<div class="dice-tooltip"><span><div class="dice-tooltip-arrow-left"></div><div class="dice-tooltip-text">' + text + '</div></span></div>';
+  let template = '<div class="dtt2"><span><div class="dtt2-arrow-left"></div><div class="dtt2-text">' + text + '</div></span></div>';
   // noinspection JSUnresolvedFunction
   $("body").append(template);
 }
@@ -260,7 +260,7 @@ function showTooltip(text) {
 //
 function removeTooltip() {
   // noinspection JSUnresolvedFunction
-  $(".dice-tooltip").remove();
+  $(".dtt2").remove();
 }
 
 function formatBonus(bonus) {
@@ -347,10 +347,15 @@ function rollFakeDamage(item, versatile=false) {
   }
   if ( (item.data.type === "spell") ) {
     if ( (itemData.scaling.mode === "cantrip") ) {
-      const lvl = item.actor.data.type === "character" ? actorData.details.level : actorData.details.spellLevel;
-      item._scaleCantripDamage(parts, lvl, itemData.scaling.formula );
-    } else if ( spellLevel && (itemData.scaling.mode === "level") && itemData.scaling.formula ) {
-      item._scaleSpellDamage(parts, itemData.level, spellLevel, itemData.scaling.formula, {});
+      let level;
+      if ( item.actor.type === "character" ) level = actorData.details.level;
+      else if ( itemData.preparation.mode === "innate" ) level = Math.ceil(actorData.details.cr);
+      else level = actorData.details.spellLevel;
+      item._scaleCantripDamage(parts, itemData.scaling.formula, level, rollData);
+    }
+    else if ( spellLevel && (itemData.scaling.mode === "level") && itemData.scaling.formula ) {
+      const scaling = itemData.scaling.formula;
+      item._scaleSpellDamage(parts, itemData.level, spellLevel, scaling, rollData);
     }
   }
 
