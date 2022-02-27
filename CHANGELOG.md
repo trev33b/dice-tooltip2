@@ -1,3 +1,6 @@
+# 2.3.1
+* Added guard against undefined "item" object, which apparently could happen with MidiQOL and modules that deal with automation.
+
 # 2.3.0
 **This module now requires use of DND5e system 0.95 or later.**
 * Fixed handling of scaling cantrips which caused an error to display in the console and no tooltip to appear.  This was due to a change in the DND5e 0.95 system module.

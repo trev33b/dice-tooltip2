@@ -220,6 +220,10 @@ function checkItemTooltip(el, actor) {
   let data = dataItem[0].dataset;
   let item = actor.items.get(data.itemId);
 
+  if (!item) {
+    return;
+  }
+
   let tooltipStr = "";
 
   if (item.hasAttack) {
