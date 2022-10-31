@@ -17,3 +17,6 @@ Bugs
 * Issue #2 - Console error on spells with saving throws AND damage (formula.replace is not a function)
 * Issue #6 - Possible stylesheet conflict with SmallTime module
 
+Package update page on FoundryVTT:
+* https://foundryvtt.com/admin/packages/package/
+
