@@ -146,14 +146,14 @@ function registerEventListeners(rootElement, actor) {
 function checkShortRestTooltip(actor) {
   let hitDice = [];
 
-  for (const classesKey in actor.data.data.classes) {
-    const clazz = actor.data.data.classes[classesKey];
+  for (const classesKey in actor.classes) {
+    const clazz = actor.classes[classesKey];
     let hitDieCount = hitDice[clazz.hitDice];
     if (!hitDieCount) {
       hitDieCount = 0;
     }
-    hitDieCount += clazz.levels - clazz.hitDiceUsed;
-    hitDice[clazz.hitDice] = hitDieCount;
+    hitDieCount += clazz.system.levels - clazz.system.hitDiceUsed;
+    hitDice[clazz.system.hitDice] = hitDieCount;
   }
 
   let dieStr = "";
@@ -189,7 +189,7 @@ function checkSkillTooltip(el, actor) {
     return;
   }
 
-  let skillData = actor.data.data.skills[skill];
+  let skillData = actor.system.skills[skill];
   let tooltipStr = "";
 
   tooltipStr += createToolTipText("DiceToolTip.SkillCheck","1d20" + formatBonus(skillData.total));
@@ -202,7 +202,7 @@ function checkAbilityTooltip(el, actor) {
   let dataItem = $(el).closest("li").get();
   let data = dataItem[0].dataset;
   let ability = data.ability;
-  let abilityData = actor.data.data.abilities[ability];
+  let abilityData = actor.system.abilities[ability];
   let tooltipStr = "";
 
   //Check
@@ -283,9 +283,9 @@ function formatDiceParts(rollData) {
 /* -------------------------------------------- */
 
 function rollFakeAttack(item) {
-  const itemData = item.data.data;
-  const actorData = item.actor.data.data;
-  const flags = item.actor.data.flags.dnd5e || {};
+  const itemData = item.system;
+  const actorData = item.actor.system;
+  const flags = item.actor.flags.dnd5e || {};
   if ( !item.hasAttack ) {
     throw new Error(game.i18n.localize("DiceToolTip.ErrorItemWithoutAttack"));
   }
@@ -293,7 +293,7 @@ function rollFakeAttack(item) {
 
   // Define Roll bonuses
   const parts = [`@mod`];
-  if ( (item.data.type !== "weapon") || itemData.proficient ) {
+  if ( (item.type !== "weapon") || itemData.proficient ) {
     parts.push("@prof");
   }
 
@@ -313,13 +313,13 @@ function rollFakeAttack(item) {
   };
 
   // Expanded weapon critical threshold
-  if (( item.data.type === "weapon" ) && flags.weaponCriticalThreshold) {
+  if (( item.type === "weapon" ) && flags.weaponCriticalThreshold) {
     rollConfig.critical = parseInt(flags.weaponCriticalThreshold);
   }
 
   // Elven Accuracy
-  if ( ["weapon", "spell"].includes(item.data.type) ) {
-    if (flags.elvenAccuracy && ["dex", "int", "wis", "cha"].includes(item.abilityMod)) {
+  if ( ["weapon", "spell"].includes(item.type) ) {
+    if (flags.elvenAccuracy && ["dex", "int", "wis", "cha"].includes(item.system.ability)) {
       rollConfig.elvenAccuracy = true;
     }
   }
@@ -335,8 +335,8 @@ function rollFakeAttack(item) {
 
 function rollFakeDamage(item, versatile=false) {
   const spellLevel = null; //todo: figure out how to incorporate spell level upgrades
-  const itemData = item.data.data;
-  const actorData = item.actor.data.data;
+  const itemData = item.system;
+  const actorData = item.actor.system;
   if ( !item.hasDamage ) {
     throw new Error(game.i18n.localize("DiceToolTip.ErrorItemWithoutDamage"));
   }
@@ -349,7 +349,7 @@ function rollFakeDamage(item, versatile=false) {
   if ( versatile && itemData.damage.versatile ) {
     parts[0] = itemData.damage.versatile.replaceAll(damageType,"");
   }
-  if ( (item.data.type === "spell") ) {
+  if ( (item.type === "spell") ) {
     if ( (itemData.scaling.mode === "cantrip") ) {
       let level;
       if ( item.actor.type === "character" ) level = actorData.details.level;

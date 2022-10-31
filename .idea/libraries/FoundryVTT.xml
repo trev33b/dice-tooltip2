@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="FoundryVTT" type="javaScript">
+    <properties>
+      <option name="frameworkName" value="Node.js Core Modules" />
+      <option name="frameworkVersion" value="" />
+      <sourceFilesUrls>
+        <item url="file:///Applications/FoundryVTT.app/Contents/Resources/app" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file:///Applications/FoundryVTT.app/Contents/Resources/app" />
+    </CLASSES>
+    <DOCUMENTATION>
+      <root url="https://foundryvtt.com/api/" />
+    </DOCUMENTATION>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,3 +1,6 @@
+# 2.4.0
+* Updated dice-tooltip to be compatible with FoundryVTT 10.  This version breaks compatibility wiht FoundryVTT 9.  Use 2.3.1 if you still want to use this module with FoundryVTT 9.   
+
 # 2.3.1
 * Added guard against undefined "item" object, which apparently could happen with MidiQOL and modules that deal with automation.
 
