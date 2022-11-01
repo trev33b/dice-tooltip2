@@ -7,7 +7,7 @@
         {"name": "Trevor Bechtel"},
         {"name": "Steffan Poulsen - Majestic#6238"}
     ],
-    "minimumCoreVersion": "1.0.0",
+    "minimumCoreVersion": "10",
     "compatibleCoreVersion": "10",
     "styles": ["/styles/dicetooltip.css"],
     "scripts": ["./scripts/dicetooltip.js"],
