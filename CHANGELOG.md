@@ -1,3 +1,6 @@
+# 2.4.2
+* Fix zip file reference that was causing wrong version of the module to be downloaded.  Special thanks to @thatlonelybugbear for helping to find the issue.
+
 # 2.4.1
 * Minor update to version v10 compatibility range
 

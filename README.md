@@ -65,3 +65,5 @@ His work appeared to be broken with the release of Foundry 0.8 (new Dice API) an
 and it didn't look like it was going to get fixed anytime soon.  So I forked his
 work to this location, fixed those main issues, plus make several enhancements
 to the presentation of the tooltip and the code itself.
+
+Special thanks to @thatlonelybugbear who helped figure out the compatibility issues with FoundryVTT v10. 
