@@ -1,3 +1,6 @@
+# 2.4.1
+* Minor update to version v10 compatibility range
+
 # 2.4.0
 * Updated dice-tooltip to be compatible with FoundryVTT 10.  This version breaks compatibility wiht FoundryVTT 9.  Use 2.3.1 if you still want to use this module with FoundryVTT 9.   
 
