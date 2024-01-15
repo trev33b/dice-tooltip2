@@ -1,6 +1,6 @@
 {
-    "id": "dice-tooltip",
-    "name": "dice-tooltip",
+    "id": "dice-tooltip2",
+    "name": "dice-tooltip2",
     "title": "Dice Tooltip - DnD5e",
     "description": "Shows a tooltip in actor sheets when hovering on Items/Spells/etc, with dice and bonus information. Useful for those that want to use physical dice or those that want a quick lookup of the rolls to be made.<br/><br/>This version builds on the original version by Steffan Poulsen and fixes compatibility with Foundry 0.8 and up",
     "version": "2.4.2",
@@ -33,8 +33,7 @@
     },
     "compatibility": {
         "minimum": "10",
-        "verified": "10",
-        "maximum":"10"
+        "verified": "10"
     },
     "languages": [
         {
